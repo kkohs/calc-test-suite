@@ -5,14 +5,16 @@ import neueda.homework.ex.InvalidResultException;
 import neueda.homework.pojo.Entry;
 import neueda.homework.pojo.Request;
 import neueda.homework.pojo.Result;
+import neueda.homework.pojo.Suite;
 import org.apache.http.HttpStatus;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collections;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 /**
@@ -23,8 +25,16 @@ public class CalcDriverTest extends CalcTestBase {
 
     @Test
     public void testRunCompleteSuite() throws Exception {
-
-
+        when(entity.getContent()).thenReturn(
+                new ByteArrayInputStream(new ObjectMapper()
+                        .writeValueAsBytes(Collections.singletonMap("result", "4"))));
+        Suite suite = createValidSuite();
+        final CalcDriver driver = new CalcDriverBuilder().setHttpClient(httpClient).build();
+        List<Result> results = driver.runCompleteSuite(suite);
+        for (Result result : results) {
+            assertFalse(result.hasErrors());
+            assertTrue(result.matches());
+        }
     }
 
     @Test
@@ -36,10 +46,11 @@ public class CalcDriverTest extends CalcTestBase {
         final Entry entry = createValidEntry();
         final Request request = createValidRequest();
         final Result result = driver.runSingleEntry(request, entry);
+        assertFalse(result.hasErrors());
         assertTrue(result.matches());
     }
 
-    @Test(expected = InvalidResultException.class)
+    @Test
     public void testRunSingleEntryUnmachingResult() throws Exception {
         when(entity.getContent()).thenReturn(
                 new ByteArrayInputStream(new ObjectMapper()
@@ -47,7 +58,8 @@ public class CalcDriverTest extends CalcTestBase {
         final CalcDriver driver = new CalcDriverBuilder().setHttpClient(httpClient).build();
         final Entry entry = createValidEntry();
         final Request request = createValidRequest();
-       final Result result = driver.runSingleEntry(request, entry);
+        final Result result = driver.runSingleEntry(request, entry);
+        assertFalse(result.hasErrors());
         assertFalse(result.matches());
     }
 
@@ -62,6 +74,7 @@ public class CalcDriverTest extends CalcTestBase {
         final Request request = createValidRequest();
         final Result result = driver.runSingleEntry(request, entry);
         assertTrue(result.hasErrors());
+        assertFalse(result.matches());
     }
 
     @Test
@@ -73,21 +86,7 @@ public class CalcDriverTest extends CalcTestBase {
         final Request request = createValidRequest();
         final Result result = driver.runSingleEntry(request, entry);
         assertTrue(result.hasErrors());
+        assertFalse(result.matches());
     }
 
-    private Request createValidRequest() {
-        Request request = new Request();
-        request.setMethod(Request.Method.GET);
-        request.setPath("/mock/");
-        return request;
-    }
-
-    private Entry createValidEntry() {
-        Entry entry = new Entry();
-        entry.setResult("4");
-        entry.setVariableA("2");
-        entry.setVariableB("2");
-        entry.setName("Mock");
-        return entry;
-    }
 }

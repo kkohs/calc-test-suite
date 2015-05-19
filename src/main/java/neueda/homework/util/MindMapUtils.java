@@ -10,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.rules.ErrorCollector;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -157,7 +156,22 @@ public class MindMapUtils {
             if (!validateEntry(entry)) {
                 return false;
             }
-        }       new ErrorCollector();
+        }
+        return true;
+    }
+
+    public static boolean validateSuite(final Suite suite) {
+        if (suite == null) {
+            return false;
+        } else if (suite.getCategories().isEmpty()) {
+            return false;
+        }
+
+        for (Category category : suite.getCategories()) {
+            if (!validateCategory(category)) {
+                return false;
+            }
+        }
         return true;
     }
 

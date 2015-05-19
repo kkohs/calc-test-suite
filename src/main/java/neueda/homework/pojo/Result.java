@@ -39,6 +39,10 @@ public class Result {
         this.error = error;
     }
 
+    public String getError() {
+        return error;
+    }
+
     public boolean hasErrors() {
         return StringUtils.isNotBlank(error);
     }

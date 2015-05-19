@@ -10,10 +10,10 @@ import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.logging.log4j.Logger;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author Kristaps Kohs
  */
-public class CalcDriver implements Closeable {
+public class CalcDriver implements AutoCloseable {
     private final Logger logger;
     private final HttpClient client;
     private final HttpHost endpoint;
@@ -71,6 +71,8 @@ public class CalcDriver implements Closeable {
                 result.setError("Invalid HTTP response " + statusLine.getReasonPhrase());
             }
 
+        } catch (UnknownHostException e) {
+            result.setError("Unable to reach endpoint " + e.getMessage());
         } catch (Exception e) {
             result.setError(e.getMessage());
         } finally {
