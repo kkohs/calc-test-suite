@@ -41,8 +41,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+<<<<<<< HEAD
 
 
 *.iml
 .idea
 target
+=======
+>>>>>>> parent of 70556a6... initial

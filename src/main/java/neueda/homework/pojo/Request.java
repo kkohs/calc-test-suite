@@ -6,7 +6,7 @@ package neueda.homework.pojo;
 public class Request {
     public static enum Method {POST, GET}
     private String path;
-    private Method method;
+    private Method method= Method.GET;
 
     public String getPath() {
         return path;
