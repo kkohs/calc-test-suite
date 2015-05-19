@@ -17,6 +17,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.runner.JUnitCore;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -32,9 +33,13 @@ public class Application {
     private static final Logger LOGGER = LogManager.getLogger(Application.class);
 
     public static void main(String[] args) throws Exception {
-        JAXBContext context = JAXBContext.newInstance(MindMap.class);
+      
+    }
+    
+    
+    /*  JAXBContext context = JAXBContext.newInstance(MindMap.class);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        MindMap map = (MindMap) unmarshaller.unmarshal(new FileInputStream("D:\\Develoment\\Projects\\neueda-homework\\src\\main\\resources\\calc_tests"));
+        MindMap map = (MindMap) unmarshaller.unmarshal(new FileInputStream("D:\\development\\projects\\used\\calc-test-suite\\src\\main\\resources\\calc_tests"));
 
         map.getNodes();
 
@@ -78,6 +83,5 @@ public class Application {
                 }
 
             }
-        }
-    }
+        }*/
 }
