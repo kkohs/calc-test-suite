@@ -5,12 +5,13 @@ import java.util.List;
 
 /**
  * Class representing signle test suite with multiple {@link neueda.homework.pojo.Category} to execute.
+ *
  * @author Kristaps Kohs
  */
 public class Suite {
-    /**Sutie name.*/
+    /** Sutie name. */
     private String name;
-    /**List of categories in suite.*/
+    /** List of categories in suite. */
     private List<Category> categories = new ArrayList<>();
 
 

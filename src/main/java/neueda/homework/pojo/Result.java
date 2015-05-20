@@ -1,22 +1,22 @@
 package neueda.homework.pojo;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
 /**
  * Class representing single entry execution result.
+ *
  * @author Kristaps Kohs
  */
 public class Result {
-    /**NAme of the process.*/
+    /** NAme of the process. */
     private final String processName;
-    /**Expected result.*/
+    /** Expected result. */
     private final Object expected;
-    /**Actual result.*/
+    /** Actual result. */
     private Object actual;
-    /**Error of the process.*/
+    /** Error of the process. */
     private String error;
 
     public Result(String processName, Object expected) {
@@ -32,24 +32,25 @@ public class Result {
         return actual;
     }
 
-    public Object getExpected() {
-        return expected;
-    }
-
     public void setActual(Object actual) {
         this.actual = actual;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public Object getExpected() {
+        return expected;
     }
 
     public String getError() {
         return error;
     }
 
+    public void setError(String error) {
+        this.error = error;
+    }
+
     /**
      * Checks if result contains any errors.
+     *
      * @return true if errors are present.
      */
     public boolean hasErrors() {
@@ -58,6 +59,7 @@ public class Result {
 
     /**
      * Checks if expected result matches actual.
+     *
      * @return true if matches.
      */
     public boolean matches() {

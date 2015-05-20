@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * @author Kristaps Kohs
  */
-public class MindMapUtils {
+public final class MindMapUtils {
 
     public static final String REQUEST_NODE_NAME = "request";
     public static final String PATH_KEY = "path";
@@ -32,6 +32,8 @@ public class MindMapUtils {
     public static final String VALUE_A_KEY = "a";
     public static final String VALUE_B_KEY = "b";
     public static final String RESULT_KEY = "result";
+    private MindMapUtils() {
+    }
 
     /**
      * Loads mind map from array of bytes.

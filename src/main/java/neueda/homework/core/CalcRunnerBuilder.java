@@ -9,18 +9,19 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Builder class for building {@link neueda.homework.core.CalcEntryRunner}
+ *
  * @author Kristaps Kohs
  */
 public class CalcRunnerBuilder {
-    /**Default host name for runner.*/
+    /** Default host name for runner. */
     public static final String DEFAULT_HOST = "localhost";
-    /**Json mapper.*/
+    /** Json mapper. */
     private ObjectMapper objectMapper;
-    /**Logger.*/
+    /** Logger. */
     private Logger logger;
-    /**HttpClient.*/
+    /** HttpClient. */
     private HttpClient httpClient;
-    /**Host.*/
+    /** Host. */
     private HttpHost httpHost;
 
     public CalcRunnerBuilder setObjectMapper(ObjectMapper objectMapper) {
@@ -49,8 +50,9 @@ public class CalcRunnerBuilder {
     }
 
     /**
-     * Builds new {@link neueda.homework.core.CalcEntryRunner}, 
+     * Builds new {@link neueda.homework.core.CalcEntryRunner},
      * default values are set for fields not set while assembling runner.
+     *
      * @return built runner.
      */
     public final CalcEntryRunner build() {

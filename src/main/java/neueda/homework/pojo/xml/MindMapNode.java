@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Mind map value node.
+ *
  * @author Kristaps Kohs
  */
 @XmlAccessorType(XmlAccessType.FIELD)

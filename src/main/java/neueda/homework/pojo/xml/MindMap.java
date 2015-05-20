@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Mind map root node.
+ *
  * @author Kristaps Kohs
  */
 @XmlRootElement(name = "map")

@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * @author Kristaps Kohs
  */
-public class CalcDriverIT {
+public class CalcEntryRunnerIT {
     public static final String MIND_MAP_FILE_PROPERTY = "mind.map.file";
     public static final String DEFAULT_ENDPOINT = "calculator.neueda.lv";
     public static final String ENDPOINT_PROPERTY = "test.host";
