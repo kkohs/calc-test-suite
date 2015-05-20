@@ -42,21 +42,23 @@ public class CalcEntryRunnerIT {
                     for (Result result : results) {
                         collector.checkThat(result.getError(), result.hasErrors(), CoreMatchers.equalTo(false));
                         collector.checkThat("Results did not match for "
-                                + result.getProcessName(), result.matches(), CoreMatchers.equalTo(true));
+                                        + result.getProcessName() + " expected ["
+                                        + result.getExpected() + "] actual[" + result.getActual() + "]",
+                                result.matches(), CoreMatchers.equalTo(true));
                     }
                 } else {
                     collector.addError(new RuntimeException("Invalid suite provided" + suite.getName()));
                 }
             }
         }
-    }   
-    
+    }
+
     @Test
     public void testSingleEntry() throws Exception {
         final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
         final Request request = new Request();
         request.setPath("/api/multiply");
-        
+
         final Entry entry = new Entry();
         entry.setName("Single entry multiplication tests");
         entry.setVariableA("958456851365");
@@ -67,14 +69,14 @@ public class CalcEntryRunnerIT {
             Assert.assertFalse(result.hasErrors());
             Assert.assertTrue(result.matches());
         }
-    }  
-    
+    }
+
     @Test
     public void testSingleEntryInvalidResult() throws Exception {
         final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
         final Request request = new Request();
         request.setPath("/api/multiply");
-        
+
         final Entry entry = new Entry();
         entry.setName("Single entry multiplication tests");
         entry.setVariableA("958456851365");
@@ -85,14 +87,14 @@ public class CalcEntryRunnerIT {
             Assert.assertFalse(result.hasErrors());
             Assert.assertFalse(result.matches());
         }
-    }  
-    
+    }
+
     @Test
     public void testSingleEntryWithErrors() throws Exception {
         final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
         final Request request = new Request();
         request.setPath("/api/multiply");
-        
+
         final Entry entry = new Entry();
         entry.setName("Single entry multiplication tests");
         entry.setVariableA("958456851365");
@@ -107,7 +109,7 @@ public class CalcEntryRunnerIT {
 
 
     private List<Suite> prepareTest() throws Exception {
-       final String mindMapFileName = System.getProperty(MIND_MAP_FILE_PROPERTY);
+        final String mindMapFileName = System.getProperty(MIND_MAP_FILE_PROPERTY);
         byte[] mindMapData;
         if (StringUtils.isBlank(mindMapFileName)) {
             mindMapData = loadDefaultMindMap();
