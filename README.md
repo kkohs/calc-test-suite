@@ -1,5 +1,6 @@
 #Automated testing tool
-
+## Description
+https://github.com/neueda/homework/tree/master/mindmap
 ## Requirements
 * Java 1.7
 * Maven 3.0
