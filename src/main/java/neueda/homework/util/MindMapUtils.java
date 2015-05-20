@@ -26,56 +26,83 @@ import java.util.Map;
 public class MindMapUtils {
 
     public static final String REQUEST_NODE_NAME = "request";
+    public static final String PATH_KEY = "path";
+    public static final String METHOD_KEY = "method";
+    public static final String TEST_NAME_KEY = "test";
+    public static final String VALUE_A_KEY = "a";
+    public static final String VALUE_B_KEY = "b";
+    public static final String RESULT_KEY = "result";
 
+    /**
+     * Loads mind map from array of bytes.
+     *
+     * @param file loaded in memory file.
+     * @return loaded map.
+     * @throws Exception if error occurs while parsing map.
+     */
     public static MindMap loadMinMap(final byte[] file) throws Exception {
         return loadMinMap(new ByteArrayInputStream(file));
     }
 
+    /**
+     * Loads mind map from input stream.
+     *
+     * @param stream mind map input stream.
+     * @return loaded map.
+     * @throws Exception if error occurs while parsing map.
+     */
     public static MindMap loadMinMap(final InputStream stream) throws Exception {
         final JAXBContext context = JAXBContext.newInstance(MindMap.class);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
+        final Unmarshaller unmarshaller = context.createUnmarshaller();
         return (MindMap) unmarshaller.unmarshal(IOUtils.toBufferedInputStream(stream));
     }
 
-
+    /**
+     * Parses mindmap and assembles list of test suites from it.
+     *
+     * @param mindMap to parse.
+     * @return list of parsed suites.
+     */
     public static List<Suite> parseMindMap(final MindMap mindMap) {
         final List<Suite> suites = new ArrayList<>();
         for (MindMapNode node : mindMap.getNodes()) {
-            Suite suite = new Suite();
+            final Suite suite = new Suite();
             suite.setName(node.getText());
             for (MindMapNode categoryNode : node.getNodes()) {
-                Category category = parseCategory(categoryNode);
-                if (validateCategory(category)) {
-                    suite.addCategory(parseCategory(categoryNode));
-                }
+                suite.addCategory(parseCategory(categoryNode));
             }
             suites.add(suite);
         }
         return suites;
     }
 
-
+    /**
+     * Parses mind map node to assemble single category.
+     *
+     * @param categoryNode category node.
+     * @return assembled category.
+     */
     public static Category parseCategory(final MindMapNode categoryNode) {
-        Category category = new Category();
-        category.setName(categoryNode.getText());
+        final Category category = new Category();
+        category.setCategoryName(categoryNode.getText());
         for (MindMapNode entryNode : categoryNode.getNodes()) {
             if (StringUtils.equalsIgnoreCase(entryNode.getText(), REQUEST_NODE_NAME)) {
-                Request request = parseRequest(entryNode);
-                if (validateRequestEntry(request)) {
-                    category.setRequest(request);
-                }
+                category.setRequest(parseRequest(entryNode));
             } else {
-                final Entry entry = parseEntry(entryNode);
-                if (validateEntry(entry)) {
-                    category.addEntry(entry);
-                }
+                category.addEntry(parseEntry(entryNode));
             }
         }
         return category;
     }
 
+    /**
+     * Parses mindmap node to assemble request data.
+     *
+     * @param requestNode request node.
+     * @return request.
+     */
     public static Request parseRequest(final MindMapNode requestNode) {
-        Request request = new Request();
+        final Request request = new Request();
         final Map<String, String> values = new HashMap<>();
         for (MindMapNode mindMapNode : requestNode.getNodes()) {
             parseValue(mindMapNode.getText(), values);
@@ -83,11 +110,11 @@ public class MindMapUtils {
 
         for (String key : values.keySet()) {
             switch (key) {
-                case "path": {
+                case PATH_KEY: {
                     request.setPath(values.get(key));
                 }
                 break;
-                case "method": {
+                case METHOD_KEY: {
                     request.setMethod(EnumUtils.getEnum(Request.Method.class, values.get(key)));
                 }
             }
@@ -95,6 +122,12 @@ public class MindMapUtils {
         return request;
     }
 
+    /**
+     * Parses mind map node to assemble single entry object..
+     *
+     * @param entryNode mind map node.
+     * @return entry.
+     */
     public static Entry parseEntry(final MindMapNode entryNode) {
         Entry entry = new Entry();
         final Map<String, String> values = new HashMap<>();
@@ -105,19 +138,19 @@ public class MindMapUtils {
 
         for (String key : values.keySet()) {
             switch (key) {
-                case "test": {
+                case TEST_NAME_KEY: {
                     entry.setName(values.get(key));
                 }
                 break;
-                case "a": {
+                case VALUE_A_KEY: {
                     entry.setVariableA(values.get(key));
                 }
                 break;
-                case "b": {
+                case VALUE_B_KEY: {
                     entry.setVariableB(values.get(key));
                 }
                 break;
-                case "result": {
+                case RESULT_KEY: {
                     entry.setResult(values.get(key));
                 }
                 break;
@@ -126,6 +159,12 @@ public class MindMapUtils {
         return entry;
     }
 
+    /**
+     * Parses key-value of node and adds to map of values if matches critteria.
+     *
+     * @param keyValueString key value string.
+     * @param values         values.
+     */
     public static void parseValue(final String keyValueString, final Map<String, String> values) {
         if (StringUtils.isNotBlank(keyValueString)) {
             final String[] keyValue = StringUtils.split(keyValueString, ":");
@@ -135,15 +174,33 @@ public class MindMapUtils {
         }
     }
 
+    /**
+     * Validates request object.
+     *
+     * @param request to validate.
+     * @return true if valid.
+     */
     public static boolean validateRequestEntry(final Request request) {
         return request != null && request.getMethod() != null && StringUtils.isNotBlank(request.getPath());
     }
 
+    /**
+     * Validates entry object.
+     *
+     * @param entry to validate.
+     * @return true if valid.
+     */
     public static boolean validateEntry(final Entry entry) {
         return entry != null && StringUtils.isNotBlank(entry.getResult())
                 && StringUtils.isNotBlank(entry.getVariableA()) && StringUtils.isNotBlank(entry.getVariableB());
     }
 
+    /**
+     * Validates category object.
+     *
+     * @param category to validate.
+     * @return true if valid.
+     */
     public static boolean validateCategory(final Category category) {
         if (category == null) {
             return false;
@@ -160,6 +217,12 @@ public class MindMapUtils {
         return true;
     }
 
+    /**
+     * Validates suite object.
+     *
+     * @param suite to validate.
+     * @return true if valid.
+     */
     public static boolean validateSuite(final Suite suite) {
         if (suite == null) {
             return false;

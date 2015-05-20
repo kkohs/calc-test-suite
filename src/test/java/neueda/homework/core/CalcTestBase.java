@@ -54,7 +54,7 @@ public abstract class CalcTestBase {
 
     protected Category createValidCategory() {
         Category category = new Category();
-        category.setName("Test category");
+        category.setCategoryName("Test category");
         category.setRequest(createValidRequest());
         category.addEntry(createValidEntry());
         return category;

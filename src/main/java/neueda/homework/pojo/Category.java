@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 
+ * Class representing single category of test. i.e "Division"
  * @author Kristaps Kohs
  */
 public class Category {
-    private String name;
+    /**Name of category.*/
+    private String categoryName;
+    /**Request for category.*/
     private Request request;
+    /**List of test entries in this category.*/
     private List<Entry> entries = new ArrayList<>();
 
-    public String getName() {
-        return name;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public List<Entry> getEntries() {

@@ -1,18 +1,19 @@
 package neueda.homework.it;
 
-import neueda.homework.core.CalcDriver;
-import neueda.homework.core.CalcDriverBuilder;
+import neueda.homework.core.CalcEntryRunner;
+import neueda.homework.core.CalcRunnerBuilder;
+import neueda.homework.pojo.Entry;
+import neueda.homework.pojo.Request;
 import neueda.homework.pojo.Result;
 import neueda.homework.pojo.Suite;
-import neueda.homework.pojo.xml.MindMap;
 import neueda.homework.util.MindMapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class CalcDriverIT {
     public void testCompleteSuite() throws Exception {
         final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
         final List<Suite> suites = prepareTest();
-        try (CalcDriver driver = new CalcDriverBuilder().setHost(host).build()) {
+        try (CalcEntryRunner driver = new CalcRunnerBuilder().setHost(host).build()) {
             for (Suite suite : suites) {
                 if (MindMapUtils.validateSuite(suite)) {
                     final List<Result> results = driver.runCompleteSuite(suite);
@@ -47,6 +48,60 @@ public class CalcDriverIT {
                     collector.addError(new RuntimeException("Invalid suite provided" + suite.getName()));
                 }
             }
+        }
+    }   
+    
+    @Test
+    public void testSingleEntry() throws Exception {
+        final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
+        final Request request = new Request();
+        request.setPath("/api/multiply");
+        
+        final Entry entry = new Entry();
+        entry.setName("Single entry multiplication tests");
+        entry.setVariableA("958456851365");
+        entry.setVariableB("99999999");
+        entry.setResult("95845684178043148635");
+        try (CalcEntryRunner driver = new CalcRunnerBuilder().setHost(host).build()) {
+            final Result result = driver.runSingleEntry(request, entry);
+            Assert.assertFalse(result.hasErrors());
+            Assert.assertTrue(result.matches());
+        }
+    }  
+    
+    @Test
+    public void testSingleEntryInvalidResult() throws Exception {
+        final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
+        final Request request = new Request();
+        request.setPath("/api/multiply");
+        
+        final Entry entry = new Entry();
+        entry.setName("Single entry multiplication tests");
+        entry.setVariableA("958456851365");
+        entry.setVariableB("99999999");
+        entry.setResult("5");
+        try (CalcEntryRunner driver = new CalcRunnerBuilder().setHost(host).build()) {
+            final Result result = driver.runSingleEntry(request, entry);
+            Assert.assertFalse(result.hasErrors());
+            Assert.assertFalse(result.matches());
+        }
+    }  
+    
+    @Test
+    public void testSingleEntryWithErrors() throws Exception {
+        final String host = StringUtils.defaultString(System.getProperty(ENDPOINT_PROPERTY), DEFAULT_ENDPOINT);
+        final Request request = new Request();
+        request.setPath("/api/multiply");
+        
+        final Entry entry = new Entry();
+        entry.setName("Single entry multiplication tests");
+        entry.setVariableA("958456851365");
+        entry.setVariableB("NOT A NUMBER");
+        entry.setResult("5");
+        try (CalcEntryRunner driver = new CalcRunnerBuilder().setHost(host).build()) {
+            final Result result = driver.runSingleEntry(request, entry);
+            Assert.assertTrue(result.hasErrors());
+            Assert.assertFalse(result.matches());
         }
     }
 

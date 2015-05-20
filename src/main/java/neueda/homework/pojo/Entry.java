@@ -1,12 +1,17 @@
 package neueda.homework.pojo;
 
 /**
+ * Class representing single test entry.
  * @author Kristaps Kohs
  */
 public class Entry {
+    /**Entry name.*/
     private String name;
+    /**Variable A.*/
     private String variableA;
+    /**Variable B..*/
     private String variableB;
+    /**Expected result.*/
     private String result;
 
     public String getName() {

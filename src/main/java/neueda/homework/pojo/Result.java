@@ -6,12 +6,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
+ * Class representing single entry execution result.
  * @author Kristaps Kohs
  */
 public class Result {
+    /**NAme of the process.*/
     private final String processName;
+    /**Expected result.*/
     private final Object expected;
+    /**Actual result.*/
     private Object actual;
+    /**Error of the process.*/
     private String error;
 
     public Result(String processName, Object expected) {
@@ -43,10 +48,18 @@ public class Result {
         return error;
     }
 
+    /**
+     * Checks if result contains any errors.
+     * @return true if errors are present.
+     */
     public boolean hasErrors() {
         return StringUtils.isNotBlank(error);
     }
 
+    /**
+     * Checks if expected result matches actual.
+     * @return true if matches.
+     */
     public boolean matches() {
         return Objects.equals(expected, actual);
     }

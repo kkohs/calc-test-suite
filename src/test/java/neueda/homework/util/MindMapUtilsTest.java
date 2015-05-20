@@ -6,7 +6,6 @@ import neueda.homework.pojo.Request;
 import neueda.homework.pojo.Suite;
 import neueda.homework.pojo.xml.MindMap;
 import neueda.homework.pojo.xml.MindMapNode;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
@@ -78,7 +77,7 @@ public class MindMapUtilsTest {
         final Category category = MindMapUtils.parseCategory(categoryNode);
         assertNotNull(category);
         assertTrue(MindMapUtils.validateCategory(category));
-        assertEquals("Multiply", category.getName());
+        assertEquals("Multiply", category.getCategoryName());
         assertNotNull(category.getRequest());
         assertFalse(category.getEntries().isEmpty());
 
@@ -92,6 +91,14 @@ public class MindMapUtilsTest {
         assertTrue(MindMapUtils.validateRequestEntry(request));
         assertEquals(Request.Method.GET, request.getMethod());
         assertEquals("/path", request.getPath());
+    }   
+    
+    @Test
+    public void testParseInvalidRequest() throws Exception {
+        final MindMapNode requestNode = createRequestNode("POST", "/path");
+        final Request request = MindMapUtils.parseRequest(requestNode);
+        assertNotNull(request);
+        assertFalse(MindMapUtils.validateRequestEntry(request));
     }
 
     @Test
