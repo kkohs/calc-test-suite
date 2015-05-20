@@ -1,4 +1,4 @@
-package neueda.homework.pojo;
+package neueda.homework.model;
 
 import org.apache.commons.lang3.StringUtils;
 

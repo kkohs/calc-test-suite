@@ -6,10 +6,11 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import neueda.homework.core.CalcEntryRunner;
 import neueda.homework.core.CalcRunnerBuilder;
-import neueda.homework.pojo.Result;
-import neueda.homework.pojo.Suite;
-import neueda.homework.pojo.xml.MindMap;
+import neueda.homework.model.Result;
+import neueda.homework.model.Suite;
+import neueda.homework.model.xml.MindMap;
 import neueda.homework.util.MindMapUtils;
+import neueda.homework.util.SuiteUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,7 +67,7 @@ public class ConsoleRunner {
             final List<Suite> suites = MindMapUtils.parseMindMap(mindMap);
 
             for (Suite suite : suites) {
-                if (!MindMapUtils.validateSuite(suite)) {
+                if (!SuiteUtils.validateSuite(suite)) {
                     throw new InvalidPropertiesFormatException("Suite " + suite.getName()
                             + " contains invalid or missing properties");
                 }

@@ -1,11 +1,11 @@
 package neueda.homework.util;
 
-import neueda.homework.pojo.Category;
-import neueda.homework.pojo.Entry;
-import neueda.homework.pojo.Request;
-import neueda.homework.pojo.Suite;
-import neueda.homework.pojo.xml.MindMap;
-import neueda.homework.pojo.xml.MindMapNode;
+import neueda.homework.model.Category;
+import neueda.homework.model.Entry;
+import neueda.homework.model.Request;
+import neueda.homework.model.Suite;
+import neueda.homework.model.xml.MindMap;
+import neueda.homework.model.xml.MindMapNode;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
@@ -36,8 +36,7 @@ public class MindMapUtilsTest {
         final InputStream stream = getClass().getClassLoader().getResourceAsStream("complete.mm");
         byte[] file = IOUtils.toByteArray(stream);
         IOUtils.closeQuietly(stream);
-        MindMap mindMap =
-                MindMapUtils.loadMinMap(file);
+        MindMap mindMap = MindMapUtils.loadMinMap(file);
         assertNotNull(mindMap);
     }
 
@@ -76,7 +75,6 @@ public class MindMapUtilsTest {
 
         final Category category = MindMapUtils.parseCategory(categoryNode);
         assertNotNull(category);
-        assertTrue(MindMapUtils.validateCategory(category));
         assertEquals("Multiply", category.getCategoryName());
         assertNotNull(category.getRequest());
         assertFalse(category.getEntries().isEmpty());
@@ -88,7 +86,6 @@ public class MindMapUtilsTest {
         final MindMapNode requestNode = createRequestNode("GET", "/path");
         final Request request = MindMapUtils.parseRequest(requestNode);
         assertNotNull(request);
-        assertTrue(MindMapUtils.validateRequestEntry(request));
         assertEquals(Request.Method.GET, request.getMethod());
         assertEquals("/path", request.getPath());
     }
@@ -98,7 +95,6 @@ public class MindMapUtilsTest {
         final MindMapNode requestNode = createRequestNode("POST", "/path");
         final Request request = MindMapUtils.parseRequest(requestNode);
         assertNotNull(request);
-        assertFalse(MindMapUtils.validateRequestEntry(request));
     }
 
     @Test
@@ -106,7 +102,6 @@ public class MindMapUtilsTest {
         final MindMapNode entryNode = createEntryNode("sometest", "1", "2", "3");
         final Entry entry = MindMapUtils.parseEntry(entryNode);
         assertNotNull(entry);
-        assertTrue(MindMapUtils.validateEntry(entry));
         assertEquals(entry.getName(), "sometest");
         assertEquals(entry.getVariableA(), "1");
         assertEquals(entry.getVariableB(), "2");
@@ -122,141 +117,13 @@ public class MindMapUtilsTest {
 
         final Entry entry = MindMapUtils.parseEntry(entryNode);
         assertNotNull(entry);
-        assertTrue(MindMapUtils.validateEntry(entry));
         assertEquals(entry.getName(), "sometest");
         assertEquals(entry.getVariableA(), "1");
         assertEquals(entry.getVariableB(), "2");
         assertEquals(entry.getResult(), "3");
     }
 
-    @Test
-    public void testValidateEntryNoA() throws Exception {
-        final Entry entry = new Entry();
-        entry.setName("sometoest");
-        entry.setVariableB("1");
-        entry.setResult("1");
-        assertNotNull(entry);
-        assertFalse(MindMapUtils.validateEntry(entry));
-    }
-
-    @Test
-    public void testValidateEntryNoB() throws Exception {
-        final Entry entry = new Entry();
-        entry.setName("sometoest");
-        entry.setVariableA("1");
-        entry.setResult("1");
-        assertNotNull(entry);
-        assertFalse(MindMapUtils.validateEntry(entry));
-    }
-
-    @Test
-    public void testValidateEntryNoResult() throws Exception {
-        final Entry entry = new Entry();
-        entry.setName("sometoest");
-        entry.setVariableA("1");
-        entry.setVariableB("1");
-        assertNotNull(entry);
-        assertFalse(MindMapUtils.validateEntry(entry));
-    }
-
-    @Test
-    public void testValidateCategoryInvalidRequest() throws Exception {
-        final Category category = new Category();
-        final Request request = new Request();
-        request.setPath("aaa");
-        request.setMethod(null);
-        final Entry entry = new Entry();
-        entry.setName("sometoest");
-        entry.setVariableA("1");
-        entry.setVariableB("1");
-        entry.setResult("1");
-        category.addEntry(entry);
-        assertNotNull(category);
-        assertFalse(MindMapUtils.validateCategory(category));
-    }
-
-    @Test
-    public void testValidateCategoryNoEntry() throws Exception {
-        final Category category = new Category();
-        final Request request = new Request();
-        request.setPath("sometoest");
-        category.setRequest(request);
-        assertNotNull(category);
-        assertFalse(MindMapUtils.validateCategory(category));
-    }
-
-    @Test
-    public void testValidateCategoryInvalidEntry() throws Exception {
-        final Category category = new Category();
-        final Request request = new Request();
-        request.setPath("sometoest");
-        category.setRequest(request);
-
-        final Entry entry = new Entry();
-        entry.setName("sometoest");
-        entry.setVariableA("1");
-        category.addEntry(entry);
-
-        assertNotNull(category);
-        assertFalse(MindMapUtils.validateCategory(category));
-    }
-
-    @Test
-    public void testValidateSuiteNoCategories() throws Exception {
-        final Suite suite = new Suite();
-        suite.setName("Test");
-        assertNotNull(suite);
-        assertFalse(MindMapUtils.validateSuite(suite));
-    }
-
-    @Test
-    public void testValidateSuiteInvalidCategory() throws Exception {
-        final Suite suite = new Suite();
-        suite.setName("Test");
-        suite.addCategory(new Category());
-        assertNotNull(suite);
-        assertFalse(MindMapUtils.validateSuite(suite));
-    }
-
-    @Test
-    public void testValidateSuite() throws Exception {
-        final Suite suite = new Suite();
-        suite.setName("Test");
-        final Category category = new Category();
-        final Request request = new Request();
-        request.setPath("sometoest");
-        category.setRequest(request);
-
-        final Entry entry = new Entry();
-        entry.setName("sometoest");
-        entry.setVariableA("1");
-        entry.setVariableB("1");
-        entry.setResult("1");
-        category.addEntry(entry);
-        suite.addCategory(category);
-        assertNotNull(suite);
-        assertTrue(MindMapUtils.validateSuite(suite));
-    }
-
-    @Test
-    public void testValidateEntryInvalidEntry() throws Exception {
-        assertFalse(MindMapUtils.validateEntry(null));
-    }
-
-    @Test
-    public void testValidateNullCategory() throws Exception {
-        assertFalse(MindMapUtils.validateCategory(null));
-    }
-
-    @Test
-    public void testValidateNullSuite() throws Exception {
-        assertFalse(MindMapUtils.validateSuite(null));
-    }
-
-    @Test
-    public void testValidateNullRequest() throws Exception {
-        assertFalse(MindMapUtils.validateRequestEntry(null));
-    }
+ 
 
     @Test
     public void testParseMissingDataEntryNode() throws Exception {
@@ -268,7 +135,6 @@ public class MindMapUtilsTest {
 
 
         final Entry entry = MindMapUtils.parseEntry(testNode);
-        assertFalse(MindMapUtils.validateEntry(entry));
         assertNotNull(entry);
         assertEquals(entry.getName(), "test name");
         assertEquals(entry.getVariableA(), "1");

@@ -1,17 +1,21 @@
 package neueda.homework.core;
 
-import neueda.homework.pojo.Category;
-import neueda.homework.pojo.Entry;
-import neueda.homework.pojo.Request;
-import neueda.homework.pojo.Suite;
-import org.apache.http.*;
+import neueda.homework.model.Category;
+import neueda.homework.model.Entry;
+import neueda.homework.model.Request;
+import neueda.homework.model.Suite;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 
 /**
@@ -26,8 +30,9 @@ public abstract class CalcTestBase {
     protected StatusLine statusLine;
     @Mock
     protected HttpEntity entity;
+
     @Before
-    public void initMocks() throws Exception{
+    public void initMocks() throws Exception {
         MockitoAnnotations.initMocks(this);
         stub(response.getStatusLine()).toReturn(statusLine);
         stub(response.getEntity()).toReturn(entity);

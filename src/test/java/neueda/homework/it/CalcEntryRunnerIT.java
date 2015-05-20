@@ -2,11 +2,12 @@ package neueda.homework.it;
 
 import neueda.homework.core.CalcEntryRunner;
 import neueda.homework.core.CalcRunnerBuilder;
-import neueda.homework.pojo.Entry;
-import neueda.homework.pojo.Request;
-import neueda.homework.pojo.Result;
-import neueda.homework.pojo.Suite;
+import neueda.homework.model.Entry;
+import neueda.homework.model.Request;
+import neueda.homework.model.Result;
+import neueda.homework.model.Suite;
 import neueda.homework.util.MindMapUtils;
+import neueda.homework.util.SuiteUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,7 @@ public class CalcEntryRunnerIT {
         final List<Suite> suites = prepareTest();
         try (CalcEntryRunner driver = new CalcRunnerBuilder().setHost(host).build()) {
             for (Suite suite : suites) {
-                if (MindMapUtils.validateSuite(suite)) {
+                if (SuiteUtils.validateSuite(suite)) {
                     final List<Result> results = driver.runCompleteSuite(suite);
                     for (Result result : results) {
                         collector.checkThat(result.getError(), result.hasErrors(), CoreMatchers.equalTo(false));

@@ -1,4 +1,4 @@
-package neueda.homework.pojo;
+package neueda.homework.model;
 
 /**
  * Class representing single test entry.

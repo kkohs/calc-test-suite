@@ -1,7 +1,7 @@
-package neueda.homework.pojo;
+package neueda.homework.model;
 
 /**
- * Class representing request data for a {@link neueda.homework.pojo.Category}.
+ * Class representing request data for a {@link neueda.homework.model.Category}.
  *
  * @author Kristaps Kohs
  */

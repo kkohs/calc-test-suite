@@ -1,11 +1,11 @@
 package neueda.homework.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import neueda.homework.pojo.Category;
-import neueda.homework.pojo.Entry;
-import neueda.homework.pojo.Request;
-import neueda.homework.pojo.Result;
-import neueda.homework.pojo.Suite;
+import neueda.homework.model.Category;
+import neueda.homework.model.Entry;
+import neueda.homework.model.Request;
+import neueda.homework.model.Result;
+import neueda.homework.model.Suite;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;

@@ -1,10 +1,10 @@
-package neueda.homework.pojo;
+package neueda.homework.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class representing signle test suite with multiple {@link neueda.homework.pojo.Category} to execute.
+ * Class representing signle test suite with multiple {@link neueda.homework.model.Category} to execute.
  *
  * @author Kristaps Kohs
  */
@@ -27,9 +27,6 @@ public class Suite {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
 
     public void addCategory(final Category category) {
         categories.add(category);

@@ -1,4 +1,4 @@
-package neueda.homework.pojo;
+package neueda.homework.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,6 @@ public class Category {
         return entries;
     }
 
-    public void setEntries(List<Entry> entries) {
-        this.entries = entries;
-    }
 
     public void addEntry(final Entry entry) {
         entries.add(entry);
